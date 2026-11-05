@@ -20,6 +20,9 @@ public class DresseurController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DresseurDto> trouverDresseur(@PathVariable Long id) {
-        throw new UnsupportedOperationException("À implémenter");
+        // 204 si absent : requête réussie, aucune ressource (le sujet écrit 201, qui signifie Created)
+        return service.trouverDresseur(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.noContent().build());
     }
 }
