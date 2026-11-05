@@ -6,8 +6,11 @@ import fr.ipi.pokemon.repository.DresseurRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+// readOnly : la liste des Pokémon (chargée à la demande) est lue dans la transaction
 @Service
+@Transactional(readOnly = true)
 public class DresseurService {
 
     private static final int TYPES_DIVERSITE = 3;
