@@ -100,6 +100,10 @@
 				<groupId>org.pitest</groupId>
 				<artifactId>pitest-maven</artifactId>
 				<version>1.30.2</version>
+				<!-- Échoue si un mutant survit : la CI ne reste pas verte sur un score en baisse -->
+				<configuration>
+					<mutationThreshold>100</mutationThreshold>
+				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.pitest</groupId>
