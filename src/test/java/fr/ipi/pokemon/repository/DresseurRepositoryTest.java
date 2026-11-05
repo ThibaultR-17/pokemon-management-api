@@ -1,6 +1,7 @@
 package fr.ipi.pokemon.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import fr.ipi.pokemon.entity.Dresseur;
 import fr.ipi.pokemon.entity.Pokemon;
@@ -8,8 +9,10 @@ import fr.ipi.pokemon.entity.TypePokemon;
 import jakarta.persistence.EntityManager;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @DataJpaTest
 class DresseurRepositoryTest {
@@ -77,5 +80,20 @@ class DresseurRepositoryTest {
         assertEquals(1, relu.getPokemons().size());
         assertEquals("Onix", relu.getPokemons().get(0).getNom());
         assertEquals(TypePokemon.ROCHE, relu.getPokemons().get(0).getType());
+    }
+
+    @Test
+    void should_reject_pokemon_when_type_is_null() {
+        // Arrange : un type null compterait comme un type distinct dans le bonus de diversité
+        Dresseur pierre = new Dresseur("Pierre", "Argenta");
+        Pokemon onix = new Pokemon("Onix", null, 40);
+        onix.setDresseur(pierre);
+        pierre.getPokemons().add(onix);
+
+        // Act
+        Executable sauvegarde = () -> repository.saveAndFlush(pierre);
+
+        // Assert : refusé par la base (colonne NOT NULL)
+        assertThrows(DataIntegrityViolationException.class, sauvegarde);
     }
 }
