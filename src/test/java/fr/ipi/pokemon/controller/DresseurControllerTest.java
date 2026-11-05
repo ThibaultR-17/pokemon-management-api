@@ -1,5 +1,8 @@
 package fr.ipi.pokemon.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -51,5 +54,17 @@ class DresseurControllerTest {
         // Assert : 204 plutôt que le « 201 » du sujet (voir PLAN_DE_TEST.md)
         reponse.andExpect(status().isNoContent())
                 .andExpect(content().string(""));
+    }
+
+    @Test
+    void should_return_400_when_id_is_not_positive() throws Exception {
+        // Arrange : aucun dresseur n'a d'id 0
+
+        // Act
+        ResultActions reponse = mockMvc.perform(get("/dresseurs/0"));
+
+        // Assert : rejeté à l'entrée, le service n'est jamais appelé
+        reponse.andExpect(status().isBadRequest());
+        verify(service, never()).trouverDresseur(any());
     }
 }

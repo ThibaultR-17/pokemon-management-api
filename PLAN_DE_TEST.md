@@ -96,6 +96,7 @@ Jeu de données (`data.sql`) : **Sacha** (Kanto) avec Pikachu (Électrik, 55), S
 |---|---|---|---|
 | C1 | `should_return_200_and_dto_when_dresseur_exists` | renvoie `DresseurDTO("Sacha", 3, 135)` | **200**, JSON `nomDresseur`, `nombrePokemons`, `niveauDresseur` |
 | C2 | `should_return_204_when_dresseur_does_not_exist` | renvoie `Optional.empty()` | **204**, corps vide |
+| C3 | `should_return_400_when_id_is_not_positive` | jamais appelé | **400** : l'id est validé à l'entrée (Bean Validation, `@Positive`) |
 
 ## Conventions
 
@@ -105,7 +106,7 @@ Jeu de données (`data.sql`) : **Sacha** (Kanto) avec Pikachu (Électrik, 55), S
 
 ## Ordre TDD
 
-Une couche à la fois, un cas à la fois, du plus simple au plus riche : R1 → R4, puis S1 → S11, puis C1 → C2.
+Une couche à la fois, un cas à la fois, du plus simple au plus riche : R1 → R4, puis S1 → S11, puis C1 → C3.
 Chaque cycle : test rouge, code minimal vert, refactor ; un commit quand tout est vert.
 
 ## Critères de sortie
