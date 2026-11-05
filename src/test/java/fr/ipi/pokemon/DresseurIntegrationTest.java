@@ -1,6 +1,7 @@
 package fr.ipi.pokemon;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,5 +32,17 @@ class DresseurIntegrationTest {
                 .andExpect(jsonPath("$.nomDresseur").value("Sacha"))
                 .andExpect(jsonPath("$.nombrePokemons").value(3))
                 .andExpect(jsonPath("$.niveauDresseur").value(135));
+    }
+
+    @Test
+    void should_return_204_when_dresseur_is_not_in_database() throws Exception {
+        // Arrange : aucun dresseur d'id 999 dans data.sql
+
+        // Act
+        ResultActions reponse = mockMvc.perform(get("/dresseurs/999"));
+
+        // Assert
+        reponse.andExpect(status().isNoContent())
+                .andExpect(content().string(""));
     }
 }

@@ -67,4 +67,16 @@ class DresseurControllerTest {
         reponse.andExpect(status().isBadRequest());
         verify(service, never()).trouverDresseur(any());
     }
+
+    @Test
+    void should_return_400_when_id_is_not_a_number() throws Exception {
+        // Arrange : « abc » ne se convertit pas en Long
+
+        // Act
+        ResultActions reponse = mockMvc.perform(get("/dresseurs/abc"));
+
+        // Assert : rejeté à l'entrée, le service n'est jamais appelé
+        reponse.andExpect(status().isBadRequest());
+        verify(service, never()).trouverDresseur(any());
+    }
 }

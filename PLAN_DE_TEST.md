@@ -13,7 +13,7 @@ Ce plan liste les cas de test **avant** le code (TDD) : chaque cas devient un te
 
 Chaque couche est testée **isolée** : le service ne touche pas la base, le contrôleur ne calcule rien. Une règle n'est vérifiée qu'à un seul étage : le calcul du niveau dans le service, pas dans le contrôleur.
 
-**Hors périmètre** : création / modification / suppression (le sujet ne demande que la lecture), validation des données (niveau négatif, type vide), sécurité.
+**Hors périmètre** : création / modification / suppression (le sujet ne demande que la lecture), validation des données (niveau négatif), sécurité. Le type, lui, est obligatoire (V2, cas R5).
 
 ## Règle testée
 
@@ -69,6 +69,7 @@ Jeu de données (`data.sql`) : **Sacha** (Kanto) avec Pikachu (Électrik, 55), S
 | R2 | `should_find_dresseur_without_pokemon_when_he_has_none` | `data.sql` | `findById(id d'Ondine)` | 0 Pokémon |
 | R3 | `should_return_empty_when_dresseur_does_not_exist` | — | `findById(999)` | `Optional` vide |
 | R4 | `should_persist_pokemons_when_dresseur_is_saved` | nouveau dresseur + 1 Pokémon | `save`, `flush`, `clear`, `findById` | le Pokémon est relu depuis la base, rattaché au dresseur |
+| R5 | `should_reject_pokemon_when_type_is_null` | Pokémon sans type | `saveAndFlush` | `DataIntegrityViolationException` : colonne `NOT NULL` (un type `null` compterait comme un type distinct) |
 
 ### Service : `DresseurServiceTest`
 
@@ -98,6 +99,16 @@ Jeu de données (`data.sql`) : **Sacha** (Kanto) avec Pikachu (Électrik, 55), S
 | C1 | `should_return_200_and_dto_when_dresseur_exists` | renvoie `DresseurDTO("Sacha", 3, 135)` | **200**, JSON `nomDresseur`, `nombrePokemons`, `niveauDresseur` |
 | C2 | `should_return_204_when_dresseur_does_not_exist` | renvoie `Optional.empty()` | **204**, corps vide |
 | C3 | `should_return_400_when_id_is_not_positive` | jamais appelé | **400** : l'id est validé à l'entrée (Bean Validation, `@Positive`) |
+| C4 | `should_return_400_when_id_is_not_a_number` | jamais appelé | **400** : `abc` ne se convertit pas en `Long` |
+
+### Intégration : `DresseurIntegrationTest`
+
+Toutes les couches réelles (`@SpringBootTest`, `MockMvc`, H2 + `data.sql`) : vérifie leur assemblage.
+
+| # | Test | Requête | Attendu |
+|---|---|---|---|
+| I1 | `should_return_sacha_with_level_135_when_all_layers_are_wired` | `GET /dresseurs/1` | **200**, Sacha, 3 Pokémon, niveau 105 + 20 + 10 = **135** |
+| I2 | `should_return_204_when_dresseur_is_not_in_database` | `GET /dresseurs/999` | **204**, corps vide |
 
 ## Conventions
 
@@ -107,7 +118,7 @@ Jeu de données (`data.sql`) : **Sacha** (Kanto) avec Pikachu (Électrik, 55), S
 
 ## Ordre TDD
 
-Une couche à la fois, un cas à la fois, du plus simple au plus riche : R1 → R4, puis S1 → S12, puis C1 → C3.
+Une couche à la fois, un cas à la fois, du plus simple au plus riche : R1 → R5, puis S1 → S12, puis C1 → C4, puis I1 → I2.
 Chaque cycle : test rouge, code minimal vert, refactor ; un commit quand tout est vert.
 
 ## Critères de sortie
