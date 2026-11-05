@@ -1,5 +1,6 @@
 package fr.ipi.pokemon.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,6 +23,8 @@ public class Pokemon {
     private Long id;
     private String nom;
     // STRING : la base stocke le nom de la constante, pas sa position (ORDINAL casse si on réordonne)
+    // NOT NULL : un type absent compterait comme un type distinct dans le bonus de diversité
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TypePokemon type;
     private int niveau;
