@@ -38,7 +38,7 @@ niveau = 1   si le dresseur n'a aucun Pokémon
 | Donnée | Partitions | Valeurs limites testées |
 |---|---|---|
 | Nombre de Pokémon | 0 / au moins 1 | 0 |
-| Types distincts | moins de 3 / au moins 3 | 2 et 3 ; 3 Pokémon mais 2 types (piège : compter les Pokémon au lieu des types) |
+| Types distincts | moins de 3 / au moins 3 | 2, 3 et 4 ; 3 Pokémon mais 2 types (piège : compter les Pokémon au lieu des types) ; `Feu` / `feu` |
 | Niveau d'un Pokémon | < 50 / ≥ 50 | 49 et 50 |
 | Nombre d'élites | 0 / 1 / plusieurs | 0, 1, 2 (le bonus est **par** Pokémon) |
 | Dresseur | existe / n'existe pas | — |
@@ -87,6 +87,8 @@ Jeu de données (`data.sql`) : **Sacha** (Kanto) avec Pikachu (Électrik, 55), S
 | S9 | `should_throw_when_dresseur_does_not_exist` | `findById` → `Optional.empty()` | `NoSuchElementException` (`assertThrows`) |
 | S10 | `should_return_dto_when_dresseur_exists` | Sacha : Électrik 10, Feu 20 | DTO (`Sacha`, 2, 30) |
 | S11 | `should_return_empty_when_dresseur_is_unknown` | `findById` → `Optional.empty()` | `Optional` vide |
+| S12 | `should_apply_diversity_bonus_when_dresseur_has_more_than_3_types` | Électrik 10, Feu 20, Eau 30, Plante 40 | 100 + 20 = **120** |
+| S13 | `should_count_types_case_sensitively_when_types_differ_only_by_case` | Feu 10, feu 20, Eau 30 | 60 + 20 = **80** |
 
 ### Controller : `DresseurControllerTest`
 
@@ -106,7 +108,7 @@ Jeu de données (`data.sql`) : **Sacha** (Kanto) avec Pikachu (Électrik, 55), S
 
 ## Ordre TDD
 
-Une couche à la fois, un cas à la fois, du plus simple au plus riche : R1 → R4, puis S1 → S11, puis C1 → C3.
+Une couche à la fois, un cas à la fois, du plus simple au plus riche : R1 → R4, puis S1 → S13, puis C1 → C3.
 Chaque cycle : test rouge, code minimal vert, refactor ; un commit quand tout est vert.
 
 ## Critères de sortie

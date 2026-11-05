@@ -170,4 +170,30 @@ class DresseurServiceTest {
         // Assert
         assertEquals(Optional.empty(), dto);
     }
+
+    @Test
+    void should_apply_diversity_bonus_when_dresseur_has_more_than_3_types() {
+        // Arrange : 4 types, « au moins 3 » et pas « exactement 3 »
+        sachaPossede(new Pokemon("Pikachu", "Électrik", 10), new Pokemon("Salamèche", "Feu", 20),
+                new Pokemon("Carapuce", "Eau", 30), new Pokemon("Bulbizarre", "Plante", 40));
+
+        // Act
+        int niveau = service.calculerNiveauDresseur(ID);
+
+        // Assert : 100 + 20
+        assertEquals(120, niveau);
+    }
+
+    @Test
+    void should_count_types_case_sensitively_when_types_differ_only_by_case() {
+        // Arrange : « Feu » et « feu » sont deux types (hypothèse du plan)
+        sachaPossede(new Pokemon("Salamèche", "Feu", 10), new Pokemon("Goupix", "feu", 20),
+                new Pokemon("Carapuce", "Eau", 30));
+
+        // Act
+        int niveau = service.calculerNiveauDresseur(ID);
+
+        // Assert : 60 + 20, 3 types distincts
+        assertEquals(80, niveau);
+    }
 }
