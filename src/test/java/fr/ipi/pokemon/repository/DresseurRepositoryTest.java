@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import fr.ipi.pokemon.entity.Dresseur;
 import fr.ipi.pokemon.entity.Pokemon;
+import fr.ipi.pokemon.entity.TypePokemon;
 import jakarta.persistence.EntityManager;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -63,7 +64,7 @@ class DresseurRepositoryTest {
     void should_persist_pokemons_when_dresseur_is_saved() {
         // Arrange
         Dresseur pierre = new Dresseur("Pierre", "Argenta");
-        Pokemon onix = new Pokemon("Onix", "Roche", 40);
+        Pokemon onix = new Pokemon("Onix", TypePokemon.ROCHE, 40);
         onix.setDresseur(pierre);
         pierre.getPokemons().add(onix);
 
@@ -75,5 +76,6 @@ class DresseurRepositoryTest {
         Dresseur relu = repository.findById(id).orElseThrow();
         assertEquals(1, relu.getPokemons().size());
         assertEquals("Onix", relu.getPokemons().get(0).getNom());
+        assertEquals(TypePokemon.ROCHE, relu.getPokemons().get(0).getType());
     }
 }
