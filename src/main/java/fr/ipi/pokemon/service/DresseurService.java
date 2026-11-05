@@ -1,5 +1,6 @@
 package fr.ipi.pokemon.service;
 
+import fr.ipi.pokemon.dto.DresseurDTO;
 import fr.ipi.pokemon.entity.Dresseur;
 import fr.ipi.pokemon.entity.Pokemon;
 import fr.ipi.pokemon.repository.DresseurRepository;
@@ -28,9 +29,9 @@ public class DresseurService {
         return niveau(repository.findById(dresseurId).orElseThrow());
     }
 
-    public Optional<DresseurDto> trouverDresseur(Long dresseurId) {
+    public Optional<DresseurDTO> trouverDresseur(Long dresseurId) {
         return repository.findById(dresseurId)
-                .map(d -> new DresseurDto(d.getNom(), d.getPokemons().size(), niveau(d)));
+                .map(d -> new DresseurDTO(d.getNom(), d.getPokemons().size(), niveau(d)));
     }
 
     private int niveau(Dresseur dresseur) {

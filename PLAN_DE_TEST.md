@@ -29,7 +29,7 @@ niveau = 1   si le dresseur n'a aucun Pokémon
 - **Dresseur inexistant → 204 No Content** : le sujet écrit « 201 », qui veut dire *Created* (RFC 9110, §15.3.2). Retenu : 204, « requête réussie, aucune ressource à renvoyer » (§15.3.5). Le 404 a été écarté parce qu'il ne distingue pas une route inconnue d'un dresseur inconnu.
 - **Types distincts** : comparaison exacte des chaînes (`"Feu"` ≠ `"feu"`).
 - **`Pokemon.dresseur`** : le sujet écrit « @One », qui n'existe pas en JPA ; c'est un `@ManyToOne`.
-- **Service, dresseur inexistant** : `calculerNiveauDresseur` lève une exception (`NoSuchElementException`) ; le contrôleur passe par une méthode qui renvoie un `Optional<DresseurDto>`.
+- **Service, dresseur inexistant** : `calculerNiveauDresseur` lève une exception (`NoSuchElementException`) ; le contrôleur passe par une méthode qui renvoie un `Optional<DresseurDTO>`.
 
 ## Conception des cas
 
@@ -94,7 +94,7 @@ Jeu de données (`data.sql`) : **Sacha** (Kanto) avec Pikachu (Électrik, 55), S
 
 | # | Test | Service simulé | Attendu |
 |---|---|---|---|
-| C1 | `should_return_200_and_dto_when_dresseur_exists` | renvoie `DresseurDto("Sacha", 3, 135)` | **200**, JSON `nomDresseur`, `nombrePokemons`, `niveauDresseur` |
+| C1 | `should_return_200_and_dto_when_dresseur_exists` | renvoie `DresseurDTO("Sacha", 3, 135)` | **200**, JSON `nomDresseur`, `nombrePokemons`, `niveauDresseur` |
 | C2 | `should_return_204_when_dresseur_does_not_exist` | renvoie `Optional.empty()` | **204**, corps vide |
 
 ## Conventions

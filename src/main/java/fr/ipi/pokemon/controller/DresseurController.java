@@ -1,6 +1,6 @@
 package fr.ipi.pokemon.controller;
 
-import fr.ipi.pokemon.service.DresseurDto;
+import fr.ipi.pokemon.dto.DresseurDTO;
 import fr.ipi.pokemon.service.DresseurService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +19,7 @@ public class DresseurController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DresseurDto> trouverDresseur(@PathVariable Long id) {
+    public ResponseEntity<DresseurDTO> trouverDresseur(@PathVariable Long id) {
         // 204 si absent : requête réussie, aucune ressource (le sujet écrit 201, qui signifie Created)
         return service.trouverDresseur(id)
                 .map(ResponseEntity::ok)

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+import fr.ipi.pokemon.dto.DresseurDTO;
 import fr.ipi.pokemon.entity.Dresseur;
 import fr.ipi.pokemon.entity.Pokemon;
 import fr.ipi.pokemon.repository.DresseurRepository;
@@ -152,10 +153,10 @@ class DresseurServiceTest {
         sachaPossede(new Pokemon("Pikachu", "Électrik", 10), new Pokemon("Salamèche", "Feu", 20));
 
         // Act
-        Optional<DresseurDto> dto = service.trouverDresseur(ID);
+        Optional<DresseurDTO> dto = service.trouverDresseur(ID);
 
         // Assert : 2 Pokémon, niveau 10 + 20
-        assertEquals(Optional.of(new DresseurDto("Sacha", 2, 30)), dto);
+        assertEquals(Optional.of(new DresseurDTO("Sacha", 2, 30)), dto);
     }
 
     @Test
@@ -164,7 +165,7 @@ class DresseurServiceTest {
         when(repository.findById(ID)).thenReturn(Optional.empty());
 
         // Act
-        Optional<DresseurDto> dto = service.trouverDresseur(ID);
+        Optional<DresseurDTO> dto = service.trouverDresseur(ID);
 
         // Assert
         assertEquals(Optional.empty(), dto);

@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import fr.ipi.pokemon.service.DresseurDto;
+import fr.ipi.pokemon.dto.DresseurDTO;
 import fr.ipi.pokemon.service.DresseurService;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class DresseurControllerTest {
     @Test
     void should_return_200_and_dto_when_dresseur_exists() throws Exception {
         // Arrange
-        when(service.trouverDresseur(1L)).thenReturn(Optional.of(new DresseurDto("Sacha", 3, 135)));
+        when(service.trouverDresseur(1L)).thenReturn(Optional.of(new DresseurDTO("Sacha", 3, 135)));
 
         // Act
         ResultActions reponse = mockMvc.perform(get("/dresseurs/1"));
