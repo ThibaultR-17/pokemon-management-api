@@ -1,6 +1,8 @@
 package fr.ipi.pokemon.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,13 +21,15 @@ public class Pokemon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nom;
-    private String type;
+    // STRING : la base stocke le nom de la constante, pas sa position (ORDINAL casse si on réordonne)
+    @Enumerated(EnumType.STRING)
+    private TypePokemon type;
     private int niveau;
 
     @ManyToOne
     private Dresseur dresseur;
 
-    public Pokemon(String nom, String type, int niveau) {
+    public Pokemon(String nom, TypePokemon type, int niveau) {
         this.nom = nom;
         this.type = type;
         this.niveau = niveau;
